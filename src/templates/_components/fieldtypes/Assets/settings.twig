@@ -1,11 +1,11 @@
 {% extends "_components/fieldtypes/elementfieldsettings" %}
 {% import "_includes/forms" as forms %}
 
-{% import "twigfield/twigfield" as twigfield %}
+{% import "codeeditor/codeEditor" as codeEditor %}
 
 {% macro uploadLocationField(config) %}
     {% embed '_includes/forms/field' with config %}
-        {% import "twigfield/twigfield" as twigfield %}
+        {% import "codeeditor/codeEditor" as codeEditor %}
         {% block input %}
             {% import '_includes/forms' as forms %}
             <div class="flex flex-nowrap">
@@ -18,17 +18,18 @@
                     }) }}
                 </div>
                 <div class="flex-grow">
-                    {{ twigfield.text({
+                    {{ codeEditor.text({
                         id: config.id,
                         class: 'ltr',
                         name: "#{config.name}Subpath",
                         value: config.subpathValue,
                         placeholder: "path/to/subfolder"|t('app'),
                         describedBy: describedBy,
-                    }, "Twigfield", "monaco-editor-background-frame", {
-                        'fontSize': 13,
+                    }, "CodeEditor", {
+                        fontSize: 13,
                     }, {
-                        'SectionShorthandFields': 0,
+                        wrapperClass: "monaco-editor-background-frame",
+                        SectionShorthandFields: 0,
                     }) }}
                 </div>
             </div>
@@ -81,7 +82,7 @@
             id: 'allow-subfolders-settings',
             class: not field.allowSubfolders ? 'hidden' : false,
         } %}
-            {{ twigfield.textField({
+            {{ codeEditor.textField({
                 id: 'restrictedDefaultUploadSubpath',
                 class: 'ltr',
                 name: 'restrictedDefaultUploadSubpath',
@@ -90,10 +91,11 @@
                 instructions: 'Where assets should be stored (relative to **Asset Location**) when they are uploaded directly to the field.'|t('app'),
                 tip: dynamicPathTip,
                 placeholder: 'path/to/subfolder'|t('app'),
-            }, "Twigfield", "monaco-editor-background-frame", {
-                'fontSize': 13,
+            }, "CodeEditor", {
+                fontSize: 13,
             }, {
-                'SectionShorthandFields': 0,
+                wrapperClass: "monaco-editor-background-frame",
+                SectionShorthandFields: 0,
             }) }}
         {% endtag %}
     {% endtag %}

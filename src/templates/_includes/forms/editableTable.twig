@@ -17,7 +17,7 @@
     {{ hiddenInput(name, '') }}
 {% endif %}
 
-{% import "twigfield/twigfield" as twigfield %}
+{% import "codeeditor/codeEditor" as codeEditor %}
 
 {% macro cellClass(fullWidth, col, class) %}
     {{- (class is iterable ? class : [class])|merge([
@@ -98,7 +98,7 @@
                         {% set headingId = "#{id}-heading-#{loop.index}" %}
                         {% set hasErrors = cell.hasErrors ?? false %}
                         {% set cellName = name~'['~rowId~']['~colId~']' %}
-                        {% set isCode = ((col.code ?? false) or col.type == 'color') and not col.type == 'twigfield' %}
+                        {% set isCode = ((col.code ?? false) or col.type == 'color') and not col.type == 'codeeditor' %}
                         <td class="{{ _self.cellClass(fullWidth, col, col.class ?? []) }} {% if isCode %}code{% endif %} {% if hasErrors %}error{% endif %}"{% if col.width ?? false %} width="{{ col.width }}"{% endif %}>
                             {% block tablecell %}
                                 {%- switch col.type -%}
@@ -179,19 +179,20 @@
                                             labelledBy: headingId,
                                             describedBy: describedBy,
                                         } only %}
-                                    {%- case 'twigfield' -%}
-                                        {% set fieldId = "#{id}-twigfield-#{rowNumber}-#{loop.index}" %}
-                                        {{ twigfield.text({
+                                    {%- case 'codeeditor' -%}
+                                        {% set fieldId = "#{id}-codeeditor-#{rowNumber}-#{loop.index}" %}
+                                        {{ codeEditor.text({
                                             id: fieldId,
                                             name: "{{ cellName }}",
                                             value: value,
                                             labelledBy: headingId,
                                             describedBy: describedBy,
                                             placeholder: col.placeholder ?? '',
-                                        }, "Twigfield", "monaco-editor-inline-frame", {
-                                            'fontSize': 13,
+                                        }, "CodeEditor", {
+                                            fontSize: 13,
                                         }, {
-                                            'SectionShorthandFields': section.id,
+                                            wrapperClass: "monaco-editor-inline-frame",
+                                            SectionShorthandFields: section.id,
                                         }) }}
                                     {%- default -%}
                                         {% if static %}
